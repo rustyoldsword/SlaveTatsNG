@@ -94,8 +94,4 @@ namespace slavetats_ng
 		}
 	}
 
-
-
-
-
 }

@@ -157,7 +157,47 @@ struct fmt::formatter<RE::BSFixedString>
 using namespace std::literals;
 using namespace REL::literals;
 
-namespace logger = SKSE::log;
+#define SLAVETATS_MAKE_RUNTIME_LOGGER(a_func, a_level_val)                                              \
+                                                                                      \
+	template <class... Args>                                                          \
+	struct [[maybe_unused]] a_func                                                    \
+	{                                                                                 \
+		a_func() = delete;                                                            \
+                                                                                      \
+		explicit a_func(                                                              \
+			/*spdlog::level::level_enum a_level,*/                                    \
+			fmt::format_string<Args...> a_fmt,                                        \
+			Args&&... a_args,                                                         \
+			SKSE::stl::source_location a_loc = SKSE::stl::source_location::current()) \
+		{                                                                             \
+			auto logger = spdlog::default_logger();                                   \
+			if (logger && logger->should_log(a_level_val)) {                          \
+				spdlog::log(                                                          \
+					spdlog::source_loc{                                               \
+						a_loc.file_name(),                                            \
+						static_cast<int>(a_loc.line()),                               \
+						a_loc.function_name() },                                      \
+					a_level_val,                                                      \
+					a_fmt,                                                            \
+					std::forward<Args>(a_args)...);                                   \
+			}                                                                         \
+		}                                                                             \
+	};                                                                                \
+                                                                                      \
+	template <class... Args>                                                          \
+	a_func(fmt::format_string<Args...>, Args&&...) -> a_func<Args...>;
+
+namespace logger
+{
+	SLAVETATS_MAKE_RUNTIME_LOGGER(info, spdlog::level::info);
+	SLAVETATS_MAKE_RUNTIME_LOGGER(error, spdlog::level::err);
+	SLAVETATS_MAKE_RUNTIME_LOGGER(debug, spdlog::level::debug);
+	SLAVETATS_MAKE_RUNTIME_LOGGER(trace, spdlog::level::trace);
+	SLAVETATS_MAKE_RUNTIME_LOGGER(warn, spdlog::level::warn);
+
+}
+
+// namespace logger = SKSE::log;
 
 namespace util {
     using SKSE::stl::report_and_fail;

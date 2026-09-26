@@ -30,7 +30,7 @@ namespace
 
 	void InitializeLog()
 	{
-		auto path = logger::log_directory();
+		auto path = SKSE::log::log_directory();
 		if (!path) {
 			SKSE::stl::report_and_fail("Failed to find standard logging directory"sv);
 		}
@@ -131,14 +131,20 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_s
 	logger::info("Load {}, result = {}", slavetats_ng::config_file, rc);
 	auto ini = slavetats_ng::config::Config::GetSingleton();
 	logger::info("blank_texture_name = {}", ini->blank_texture_name);
+	spdlog::level::level_enum level = spdlog::level::info;
 	if (rc >= 0) {
+		clib_util::ini::get_value(config, level, "Config", "logLevel", ";");
+		logger::info("spdlog log level = {}", (int)level);
+		logger::info("skee_dll_name = {}", ini->skee_dll_name);
 		clib_util::ini::get_value(config, ini->skee_dll_name, "Config", "skeeDllName", ";");
 		logger::info("skee_dll_name = {}", ini->skee_dll_name);
 		clib_util::ini::get_value(config, ini->blank_texture_name, "Config", "blankTextureName", ";");
 		logger::info("blank_texture_name = {}", ini->blank_texture_name);
 		clib_util::ini::get_value(config, ini->use_vmhook, "Config", "vmHook", ";");
 		logger::info("blank_texture_name = {}", ini->blank_texture_name);
+		clib_util::ini::get_value(config, ini->skee_dll_name, "Config", "skeeDllName", ";");
 	}
+	spdlog::set_level(level);
 	
 	InitializePapyrus();
 

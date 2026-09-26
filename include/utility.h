@@ -19,4 +19,5 @@ namespace slavetats_ng
 			static std::string md5_hash(const std::string& a_filename);
 		};
 	}
+
 }

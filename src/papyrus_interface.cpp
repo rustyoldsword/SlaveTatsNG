@@ -42,7 +42,6 @@ namespace slavetats_ng
 			return system->get_time_since_last_save();
 		}
 
-
 		bool register_functions(RE::BSScript::IVirtualMachine* vm, bool install_vm_hook)
 		{
 			if (install_vm_hook)
