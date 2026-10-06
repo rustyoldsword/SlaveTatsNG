@@ -9,6 +9,7 @@
 #include "logging.h"
 #include "config.h"
 #include "threading.h"
+#include "ube_texture_resolver.h"
 #include <future>
 
 #include "overlays.h"
@@ -666,7 +667,7 @@ namespace slavetats_ng
 				entry = JArray::getObj(on_body, i);
 				if (is_tattoo(entry)) {
 					slot = JMap::getInt(entry, "slot");
-					path = string(prefix) + string(JMap::getStr(entry, "texture"));
+					path = resolve_texture_path(a_target, string(JMap::getStr(entry, "texture")), "Body");
 					color = JMap::getInt(entry, "color");
 					glow = JMap::getInt(entry, "glow");
 					glossiness = JMap::getFlt(entry, "glossiness");
@@ -698,7 +699,7 @@ namespace slavetats_ng
 				entry = JArray::getObj(on_face, i);
 				if (is_tattoo(entry)) {
 					slot = JMap::getInt(entry, "slot");
-					path = string(prefix) + string(JMap::getStr(entry, "texture"));
+					path = resolve_texture_path(a_target, string(JMap::getStr(entry, "texture")), "Face");
 					color = JMap::getInt(entry, "color");
 					glow = JMap::getInt(entry, "glow");
 					glossiness = JMap::getFlt(entry, "glossiness");
@@ -726,7 +727,7 @@ namespace slavetats_ng
 				entry = JArray::getObj(on_hands, i);
 				if (is_tattoo(entry)) {
 					slot = JMap::getInt(entry, "slot");
-					path = string(prefix) + string(JMap::getStr(entry, "texture"));
+					path = resolve_texture_path(a_target, string(JMap::getStr(entry, "texture")), "Hands");
 					color = JMap::getInt(entry, "color");
 					glow = JMap::getInt(entry, "glow");
 					glossiness = JMap::getFlt(entry, "glossiness");
@@ -753,7 +754,7 @@ namespace slavetats_ng
 				entry = JArray::getObj(on_feet, i);
 				if (is_tattoo(entry)) {
 					slot = JMap::getInt(entry, "slot");
-					path = string(prefix) + string(JMap::getStr(entry, "texture"));
+					path = resolve_texture_path(a_target, string(JMap::getStr(entry, "texture")), "Feet");
 					color = JMap::getInt(entry, "color");
 					glow = JMap::getInt(entry, "glow");
 					glossiness = JMap::getFlt(entry, "glossiness");

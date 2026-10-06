@@ -7,6 +7,7 @@
 #include "logging.h"
 #include <cstring>
 #include "tattoo.h"
+#include "ube_texture_resolver.h"
 
 using namespace slavetats_ng::skee_wrapper;
 using namespace slavetats_ng::jcwrapper;
@@ -293,7 +294,7 @@ namespace slavetats_ng
 		}
 
 		if (JMap::getInt(a_tattoo, "in_bsa") == 0) {
-			if (!JContainers::fileExistsAtPath(string(ROOT()) + string(PREFIX()) + texture.c_str())) {
+			if (!JContainers::fileExistsAtPath(resolve_texture_file_path(a_target, texture.c_str(), area.c_str()))) {
 			 	return 0;
 			}
 		}

@@ -62,6 +62,7 @@ set(headers ${headers}
 	include/threading.h
 	include/vm_hook.h
 	include/utility.h
+	include/ube_texture_resolver.h
 	include/skee_addresses.h
 	include/nioverride_impl_legacy.h
 	src/PCH.h
@@ -97,6 +98,7 @@ set(sources ${sources}
 	src/tattoo_magic.cpp
 	src/threading.cpp
 	src/utility.cpp
+	src/ube_texture_resolver.cpp
 	src/skee_addresses.cpp
 	src/vm_hook.cpp
 	src/nioverride_impl_legacy.cpp
