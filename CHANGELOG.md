@@ -1,5 +1,15 @@
 # Changes
 
+## 0.9.0 (SlaveTats NG ++)
+
+* Tattoo textures may now live inside BSA archives. The texture existence check uses the game's resource system instead of ``JContainers.fileExistsAtPath`` (loose files only), so packed tattoos are no longer silently skipped. Tattoo JSON files must still be loose.
+* The UBE/COTR routing uses the same check, so UBE variants inside archives are found too.
+* Local build paths are trimmed from the DLL and from the CommonLib build.
+
+## 0.8.2 (UBE / COTR routing)
+
+* UBE races use ``slavetats\UBE\<texture>`` when that file exists; 3BA actors with the ``COTR`` keyword use it for the Face only.
+
 ## 0.8.0
 
 * The boolean field ``gloss`` in tattoos isn't used anymore, it has been replaced by two new float fields, ``glossiness`` and ``specularstrength``.

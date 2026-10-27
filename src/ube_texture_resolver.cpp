@@ -7,6 +7,35 @@ using namespace slavetats_ng::jcwrapper;
 
 namespace slavetats_ng
 {
+	bool texture_exists(std::string_view a_path)
+	{
+		// JContainers::fileExistsAtPath only sees loose files, so tattoos packed
+		// into BSA archives were rejected.  Ask the game's resource system
+		// instead; it resolves paths relative to Data and looks into archives.
+		std::string path{ a_path };
+		if (path.size() > 5 && _strnicmp(path.c_str(), "Data\\", 5) == 0)
+			path.erase(0, 5);
+		std::string key = path;
+		std::ranges::transform(key, key.begin(), [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
+
+		static std::mutex cache_lock;
+		static std::unordered_map<std::string, bool> cache;
+		{
+			std::scoped_lock lock(cache_lock);
+			if (auto it = cache.find(key); it != cache.end())
+				return it->second;
+		}
+
+		RE::BSResourceNiBinaryStream stream(path);
+		const bool found = stream.good();
+		if (!found)
+			logger::info("texture not found: {}", path);
+
+		std::scoped_lock lock(cache_lock);
+		cache.emplace(std::move(key), found);
+		return found;
+	}
+
 	bool is_ube_actor(RE::Actor* a_target)
 	{
 		if (!a_target) return false;
@@ -34,7 +63,7 @@ namespace slavetats_ng
 			(area == "Face" && is_cotr_actor(a_target));
 		if (use_ube) {
 			const std::string ube = "UBE\\" + rel;
-			if (JContainers::fileExistsAtPath(std::string(ROOT()) + std::string(PREFIX()) + ube))
+			if (texture_exists(std::string(ROOT()) + std::string(PREFIX()) + ube))
 				return std::string(PREFIX()) + ube;
 		}
 		return std::string(PREFIX()) + rel;

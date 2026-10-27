@@ -6,7 +6,7 @@ message("Using toolchain file ${CMAKE_TOOLCHAIN_FILE}.")
 ########################################################################################################################
 project(
         SlaveTatsNG
-        VERSION 0.8.2
+        VERSION 0.9.0
         DESCRIPTION "SlaveTats as SKSE plugin."
         LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 23)
@@ -140,3 +140,10 @@ target_link_libraries(${PROJECT_NAME}
 target_precompile_headers(${PROJECT_NAME}
         PRIVATE
         src/PCH.h)
+
+if(MSVC)
+        # keep local build paths out of the shipped DLL (__FILE__ strings and the PDB path)
+        file(TO_NATIVE_PATH "${CMAKE_SOURCE_DIR}" SLAVETATS_TRIM_ROOT)
+        target_compile_options(${PROJECT_NAME} PRIVATE "/d1trimfile:${SLAVETATS_TRIM_ROOT}")
+        target_link_options(${PROJECT_NAME} PRIVATE "/PDBALTPATH:%_PDB%")
+endif()

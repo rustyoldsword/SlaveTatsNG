@@ -294,7 +294,7 @@ namespace slavetats_ng
 		}
 
 		if (JMap::getInt(a_tattoo, "in_bsa") == 0) {
-			if (!JContainers::fileExistsAtPath(resolve_texture_file_path(a_target, texture.c_str(), area.c_str()))) {
+			if (!texture_exists(resolve_texture_file_path(a_target, texture.c_str(), area.c_str()))) {
 			 	return 0;
 			}
 		}
